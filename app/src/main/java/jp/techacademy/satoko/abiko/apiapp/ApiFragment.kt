@@ -1,5 +1,7 @@
 package jp.techacademy.satoko.abiko.apiapp
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -21,6 +23,16 @@ class ApiFragment : Fragment() {
     private val apiAdapter by lazy { ApiAdapter() }
     private val handler = Handler(Looper.getMainLooper())
 
+    // Fragment -> Activity にFavoriteの変更を通知する
+    private var fragmentCallback: FragmentCallback? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is FragmentCallback) {
+            fragmentCallback = context
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,6 +45,18 @@ class ApiFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // ここから初期化処理を行う
+        // ApiAdapterのお気に入り追加、削除用のメソッドの追加を行う
+        apiAdapter.apply {
+            // Adapterの処理をそのままActivityに通知する
+            onClickAddFavorite = {
+                fragmentCallback?.onAddFavorite(it)
+            }
+            // Adapterの処理をそのままActivityに通知する
+            onClickDeleteFavorite = {
+                fragmentCallback?.onDeleteFavorite(it.id)
+            }
+        }
+
         // RecyclerViewの初期化
         binding.recyclerView.apply {
             adapter = apiAdapter
@@ -42,6 +66,14 @@ class ApiFragment : Fragment() {
             updateData()
         }
         updateData()
+    }
+
+    /**
+     * お気に入りが削除されたときの処理（Activityからコールされる）
+     */
+    fun updateView() {
+        // RecyclerViewのAdapterに対して再描画のリクエストをする
+        apiAdapter.notifyItemRangeChanged(0, apiAdapter.itemCount)
     }
 
     private fun updateData() {
