@@ -70,6 +70,7 @@ class MainActivity : AppCompatActivity(), FragmentCallback {
         FavoriteShop.insert(FavoriteShop().apply {
             id = shop.id
             name = shop.name
+            address = shop.address as String
             imageUrl = shop.logoImage
             url = shop.couponUrls.sp.ifEmpty { shop.couponUrls.pc }
         })
