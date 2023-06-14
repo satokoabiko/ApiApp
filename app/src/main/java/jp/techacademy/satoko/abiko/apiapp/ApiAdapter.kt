@@ -70,7 +70,7 @@ class ApiItemViewHolder(private val binding: RecyclerFavoriteBinding) :
         Picasso.get().load(shop.logoImage).into(binding.imageView)
 
         // addressTextViewのtextプロパティに代入されたオブジェクトのaddressプロパティを代入
-        binding.addressTextView.text = shop.address
+        binding.addressTextView.text = shop.address.toString()
 
         // 星の処理
         binding.favoriteImageView.apply {
