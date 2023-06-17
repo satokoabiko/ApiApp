@@ -57,7 +57,7 @@
         android:layout_marginTop="16dp"
         android:ellipsize="start"
         android:maxLines="1"
-        android:textColor="@android:color/purple_700"
+        android:textColor="@android:color/holo_blue_dark"
         android:textSize="15sp"
         app:layout_constraintLeft_toLeftOf="@id/nameTextView"
         app:layout_constraintTop_toBottomOf="@id/nameTextView"

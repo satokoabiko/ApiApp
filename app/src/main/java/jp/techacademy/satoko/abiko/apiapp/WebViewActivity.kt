@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import jp.techacademy.satoko.abiko.apiapp.databinding.ActivityWebViewBinding
+import android.util.Log
 
 class WebViewActivity : AppCompatActivity() {
     private lateinit var binding: ActivityWebViewBinding
@@ -14,6 +15,30 @@ class WebViewActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.webView.loadUrl(intent.getStringExtra(KEY_URL).toString())
+
+        binding.favoriteImageView.setOnClickListener {
+            Log.e("ApiApp","★" )
+
+            // favoriteImaveView クリック時の処理
+            // 星の処理
+                binding.favoriteImageView.apply {
+                    // お気に入り状態を取得
+                    val isFavorite = FavoriteShop.findBy(shop.id) != null
+
+                    // 白抜きの星を設定
+                    setImageResource(if (isFavorite) R.drawable.ic_star else R.drawable.ic_star_border)
+
+                    // 星をタップした時の処理
+                    setOnClickListener {
+                        if (isFavorite) {
+                            adapter.onClickDeleteFavorite?.invoke(shop)
+                        } else {
+                            adapter.onClickAddFavorite?.invoke(shop)
+                        }
+                        adapter.notifyItemChanged(position)
+                    }
+                }
+        }
     }
 
     companion object {
@@ -25,26 +50,6 @@ class WebViewActivity : AppCompatActivity() {
                     url
                 )
             )
-        }
-    }
-    fun bind(shop: Shop, position: Int, adapter: ApiAdapter) {
-    // 星の処理
-        binding.favoriteImageView.apply {
-            // お気に入り状態を取得
-            val isFavorite = FavoriteShop.findBy(shop.id) != null
-
-            // 白抜きの星を設定
-            setImageResource(if (isFavorite) R.drawable.ic_star else R.drawable.ic_star_border)
-
-            // 星をタップした時の処理
-            setOnClickListener {
-                if (isFavorite) {
-                    adapter.onClickDeleteFavorite?.invoke(shop)
-                } else {
-                    adapter.onClickAddFavorite?.invoke(shop)
-                }
-                adapter.notifyItemChanged(position)
-            }
         }
     }
 }
