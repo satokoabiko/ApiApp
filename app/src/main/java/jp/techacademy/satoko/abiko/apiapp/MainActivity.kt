@@ -48,8 +48,8 @@ class MainActivity : AppCompatActivity(), FragmentCallback {
     }
 
     // 引数追加
-    override fun onClickItem(url: String, id: String, shop: String, imageUrl: String, name: String ) {
-        WebViewActivity.start(this, url , id , shop , imageUrl , name )
+    override fun onClickItem(id: String, imageUrl: String, name: String, address: String, url: String ) {
+        WebViewActivity.start(this, id , imageUrl , name, address, url )
     }
 
     /**

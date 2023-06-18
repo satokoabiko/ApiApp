@@ -6,7 +6,8 @@ import android.os.Bundle
 import jp.techacademy.satoko.abiko.apiapp.databinding.ActivityWebViewBinding
 import android.util.Log
 
-class WebViewActivity(url: String, id: String, shop: String, imageUrl: String, name: String ) : AppCompatActivity() {
+class WebViewActivity(activity: MainActivity, id: String, imageurl: String,
+                      name: String, address: String, url: String ) : AppCompatActivity() {
     private lateinit var binding: ActivityWebViewBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,26 +24,20 @@ class WebViewActivity(url: String, id: String, shop: String, imageUrl: String, n
         // 星の処理
         binding.favoriteImageView.apply {
             // お気に入り状態を取得
-            val isFavorite = FavoriteShop.findBy(shop.id) != null
+        //    val isFavorite = FavoriteShop.findBy(name.id) != null
 
             // 白抜きの星を設定
-            setImageResource(if (isFavorite) R.drawable.ic_star else R.drawable.ic_star_border)
+       //     setImageResource(if (isFavorite) R.drawable.ic_star else R.drawable.ic_star_border)
 
             // 星をタップした時の処理
             setOnClickListener {
-                if (isFavorite) {
-                    adapter.onClickDeleteFavorite?.invoke(shop)
-                } else {
-                    adapter.onClickAddFavorite?.invoke(shop)
-                }
-                adapter.notifyItemChanged(position)
             }
         }
     }
     }
     companion object {
         private const val KEY_URL = "key_url"
-        fun start(activity: MainActivity, url: String, imageUrl: String, name: String, address: String) {
+        fun start(activity: MainActivity, id: String, imageUrl: String, name: String, address: String, url: String) {
             activity.startActivity(
                 Intent(activity, WebViewActivity::class.java).putExtra(
                     KEY_URL,
