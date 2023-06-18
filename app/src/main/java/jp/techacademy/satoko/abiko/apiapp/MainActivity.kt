@@ -47,8 +47,9 @@ class MainActivity : AppCompatActivity(), FragmentCallback {
         })
     }
 
-    override fun onClickItem(url: String) {
-        WebViewActivity.start(this, url)
+    // 引数追加
+    override fun onClickItem(url: String, id: String, shop: String, imageUrl: String, name: String ) {
+        WebViewActivity.start(this, url , id , shop , imageUrl , name )
     }
 
     /**
