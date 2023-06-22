@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import jp.techacademy.satoko.abiko.apiapp.databinding.ActivityWebViewBinding
 import android.util.Log
+import androidx.recyclerview.widget.DiffUtil
 
 class WebViewActivity(activity: MainActivity, id: String, imageurl: String,
                       name: String, address: String, url: String ) : AppCompatActivity() {
@@ -17,32 +18,55 @@ class WebViewActivity(activity: MainActivity, id: String, imageurl: String,
 
         binding.webView.loadUrl(intent.getStringExtra(KEY_URL).toString())
 
-    binding.favoriteImageView.setOnClickListener {
-        Log.e("ApiApp","★" )
+        binding.favoriteImageView.setOnClickListener {
+            Log.e("ApiApp","★" )
 
-        // favoriteImaveView クリック時の処理
-        // 星の処理
-        binding.favoriteImageView.apply {
-            // お気に入り状態を取得
-        //    val isFavorite = FavoriteShop.findBy(name.id) != null
+            // favoriteImaveView クリック時の処理
+            // 星の処理
+            binding.favoriteImageView.apply {
+                // お気に入り状態を取得
+                val isFavorite = FavoriteShop.findBy(intent.getStringExtra(KEY_ID).toString()) != null
 
-            // 白抜きの星を設定
-       //     setImageResource(if (isFavorite) R.drawable.ic_star else R.drawable.ic_star_border)
+                // 白抜きの星を設定
+                setImageResource(if (isFavorite) R.drawable.ic_star else R.drawable.ic_star_border)
 
-            // 星をタップした時の処理
-            setOnClickListener {
+                // 星をタップした時の処理
+                setOnClickListener {
+                    val isFavorite = FavoriteShop.findBy(intent.getStringExtra(KEY_ID).toString()) != null
+                    // 星をタップした時の処理
+                    if (isFavorite) {
+ //                      onClickDeleteFavorite?.invoke(shop)
+                    } else {
+//                       adapter.onClickAddFavorite?.invoke(shop)
+                    }
+ //                      adapter.notifyItemChanged(position)
+                }
             }
         }
     }
+    /**
+     * データの差分を確認するクラス
+     */
+    internal class FavoriteCallback : DiffUtil.ItemCallback<FavoriteShop>() {
+
+        override fun areItemsTheSame(oldItem: FavoriteShop, newItem: FavoriteShop): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: FavoriteShop, newItem: FavoriteShop): Boolean {
+            return oldItem.equals(newItem)
+        }
     }
     companion object {
         private const val KEY_URL = "key_url"
+        private const val KEY_ID = "key_id"
+        //
         fun start(activity: MainActivity, id: String, imageUrl: String, name: String, address: String, url: String) {
             activity.startActivity(
                 Intent(activity, WebViewActivity::class.java).putExtra(
                     KEY_URL,
                     url
-                )
+                ).putExtra(KEY_ID,id)
             )
         }
     }
