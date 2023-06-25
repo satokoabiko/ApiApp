@@ -7,7 +7,7 @@ import jp.techacademy.satoko.abiko.apiapp.databinding.ActivityWebViewBinding
 import android.util.Log
 import androidx.recyclerview.widget.DiffUtil
 
-class WebViewActivity(activity: MainActivity, id: String, imageurl: String,
+class WebViewActivity(activity: MainActivity, id: String, imageUrl: String,
                       name: String, address: String, url: String ) : AppCompatActivity() {
     private lateinit var binding: ActivityWebViewBinding
 
@@ -35,11 +35,22 @@ class WebViewActivity(activity: MainActivity, id: String, imageurl: String,
                     val isFavorite = FavoriteShop.findBy(intent.getStringExtra(KEY_ID).toString()) != null
                     // 星をタップした時の処理
                     if (isFavorite) {
- //                      onClickDeleteFavorite?.invoke(shop)
+                        //favalitshopのレコード削除
+                        FavoriteShop.delete(intent.getStringExtra(KEY_ID).toString())
+                        //星の色を消す
+                        setImageResource(R.drawable.ic_star_border)
                     } else {
-//                       adapter.onClickAddFavorite?.invoke(shop)
+                        //favalitshopのレコードを作る
+                        FavoriteShop.insert(FavoriteShop().apply {
+                            id = intent.getStringExtra(KEY_ID).toString()
+                            name = intent.getStringExtra(name).toString()
+                            address = intent.getStringExtra(address).toString()
+                            imageUrl = intent.getStringExtra(imageUrl).toString()
+                            url = shop.couponUrls.sp.ifEmpty { shop.couponUrls.pc }
+                        })
+                        //星の色を付ける
+                        setImageResource(R.drawable.ic_star)
                     }
- //                      adapter.notifyItemChanged(position)
                 }
             }
         }
