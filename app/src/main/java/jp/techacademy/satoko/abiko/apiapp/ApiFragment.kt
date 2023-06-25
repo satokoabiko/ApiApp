@@ -58,6 +58,7 @@ class ApiFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // ここから初期化処理を行う
         // ApiAdapterのお気に入り追加、削除用のメソッドの追加を行う
+        var onClickItem: ((String,String,String,String,String) -> Unit)? = null
         apiAdapter.apply {
             // Adapterの処理をそのままActivityに通知する
             onClickAddFavorite = {
@@ -68,8 +69,8 @@ class ApiFragment : Fragment() {
                 fragmentCallback?.onDeleteFavorite(it.id)
             }
             // Itemをクリックしたとき
-            onClickItem = {
-                fragmentCallback?.onClickItem(id: String, imageUrl: String, name: String, address: String, url: String )
+            onClickItem =  {id: String, imageUrl: String, name: String, address: String, url: String->
+                fragmentCallback?.onClickItem(id, imageUrl, name, address, url )
             }
         }
 
