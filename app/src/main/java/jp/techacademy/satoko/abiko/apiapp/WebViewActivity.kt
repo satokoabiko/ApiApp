@@ -46,7 +46,7 @@ class WebViewActivity(activity: MainActivity, id: String, imageUrl: String,
                             name = intent.getStringExtra(name).toString()
                             address = intent.getStringExtra(address).toString()
                             imageUrl = intent.getStringExtra(imageUrl).toString()
-                            url = shop.couponUrls.sp.ifEmpty { shop.couponUrls.pc }
+                            url = intent.getStringExtra(url).toString()
                         })
                         //星の色を付ける
                         setImageResource(R.drawable.ic_star)
